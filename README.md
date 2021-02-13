@@ -13,5 +13,5 @@ The hive project is licensed under the [GNU General Public License v3.0][gpl]. Y
 sudo setfacl --modify user:$USER:rw /var/run/docker.sock
 apt install golang-go
 go build
-./hive --sim devp2p --client go-ethereum_latest --results-root /tmp/hive_results --loglevel 4
+./hive --sim devp2p --client go-ethereum-bissias_latest --results-root /tmp/hive_results --loglevel 4
 ```
