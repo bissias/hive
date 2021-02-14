@@ -6,25 +6,28 @@
 
 #### BASED ON ETHEREUM DOCKER FILE ####
 FROM golang:1.15-alpine as builder
+ARG branch=master
 
 RUN apk add --no-cache git make gcc musl-dev linux-headers git
 
 RUN git clone https://github.com/bissias/go-ethereum /go-ethereum
+RUN cd /go-ethereum && git checkout $branch
 RUN cd /go-ethereum && make geth
 
 # Pull Geth into a second stage deploy alpine container
 FROM alpine:latest
 
 RUN apk add --no-cache ca-certificates
+
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
+# If you want to maintain access to /go-ethereum, comment the line above 
+# and uncomment the line below
+#RUN cp /go-ethereum/build/bin/geth /usr/local/bin/
 
 EXPOSE 8545 8546 30303 30303/udp
 ########################################
 
 RUN apk add --update bash curl jq
-
-# FROM alpine:latest
-# ARG branch=master
 
 # Build go-ethereum on the fly and delete all build tools afterwards
 # RUN \
